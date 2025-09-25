@@ -28,7 +28,8 @@ char const *strip(char const *str) {
   // consisted of nothing but spaces, so we'll return the
   // empty string.
   if (num_spaces >= size) {
-    return "";
+     char *empty_str = (char*)calloc(1, sizeof(char));
+    return empty_str;
   }
 
   // Allocate a slot for all the "saved" characters
@@ -55,15 +56,18 @@ int is_clean(char const *str) {
   // result is the same as the original string.
   char const *cleaned = strip(str);
 
+    if (cleaned == NULL) {
+      return 0;
+    }
   // strcmp compares two strings, returning a negative value if
   // the first is less than the second (in alphabetical order),
   // 0 if they're equal, and a positive value if the first is
   // greater than the second.
   int result = strcmp(str, cleaned);
 
-  if (strcmp (cleaned, "") != 0) {
-    free((void*)cleaned);
-  }
-  // free(cleaned);
+  // if (strcmp (str, cleaned)) {
+  //   free((void*)cleaned);
+  // }
+  free((void*)cleaned);
   return result == 0;
 }

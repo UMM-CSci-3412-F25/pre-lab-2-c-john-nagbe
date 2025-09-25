@@ -21,3 +21,11 @@ So for every test that calls 'strip', valgrind sees a leak.
     - I freed the result after each test by:
       - storing the result in a temporary variable, asserting, and then freeing it.
    
+   
+However: Running the code again, there was still two more errors 
+1. "free(): invalid pointer". this was happening because the test.cpp file's test harness calls free() on the pointer returned by your strip function. So, When your strip function returns "", it returns a pointer to a string literal. This pointer is not valid for free() because it was never allocated by calloc.
+  - Solution:
+      - I modified the 'strip' function to always return a dynamically allocated string. Even if the result is an empty string, it should still 'calloc' a small amount of memory for it.
+2. Valgrind was successfully running the test suite, and all 10 tests passed. However, it detected a memory leak. The test report showed that 1 byte in 1 block is "definitely lost".
+   - The memory leak was happening in the 'is_clean' function. the function was calling strip(str), which returns a dynamically allocated string, but was not always freeing the memory that strip returns.
+ - Solution:
