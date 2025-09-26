@@ -29,3 +29,4 @@ However: Running the code again, there was still two more errors
 2. Valgrind was successfully running the test suite, and all 10 tests passed. However, it detected a memory leak. The test report showed that 1 byte in 1 block is "definitely lost".
    - The memory leak was happening in the 'is_clean' function. the function was calling strip(str), which returns a dynamically allocated string, but was not always freeing the memory that strip returns.
  - Solution:
+ - I fixed the 'is_clean' function to unconditionally free the memory returned by strip. And removed the if statement that checks if (strcmp (cleaned, "") != 0).
